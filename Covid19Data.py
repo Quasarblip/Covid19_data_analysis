@@ -140,59 +140,6 @@ def DataTesting(option, data):
 	return date, AvgValue, stdDeviation, high, highestValueState, low, lowestValueState
 
 
-def DataMortalityRate(data):
-	total = 0.0
-	totalStdDeviation = 0.0
-	count = 0
-	high = 0.0
-	highestMortalityRateState = ""
-	lowestMortalityRateState = ""
-	#100 percent mortality rate is not plausible... lets hope.
-	low = 100.0
-	
-	for state in data:
-		count += 1
-		#print(count)
-
-		if	state.getMortality() == "":
-			continue
-		elif math.isnan(state.getMortality()):
-			continue
-		
-		NowMortalityRate = float(state.getMortality())
-		#print(NowMortalityRate)
-	
-		#capture high and low
-		if NowMortalityRate > high:
-			high = NowMortalityRate
-		elif NowMortalityRate < low:
-			low = NowMortalityRate
-		
-		total += NowMortalityRate
-		totalStdDeviation += NowMortalityRate * NowMortalityRate
-
-	for state in data:
-		if state.getMortality() == high:
-			highestMortalityRateState = state.getState()
-		if state.getMortality() == low:
-			lowestMortalityRateState = state.getState()
-
-	AvgMortality = total / float(count)
-	stdDeviation = math.sqrt(total/count)
-
-	#print(AvgMortality, 'is the average mortality rate among states')
-	#print(stdDeviation, "is the standard deviation")
-	
-	#print(high, "is the highest value")
-	#print(low, "is the lowest value")
-	
-	return AvgMortality, stdDeviation, high, highestMortalityRateState, low, lowestMortalityRateState
-
-
-
-
-
-
 
 def FormatData(file):
 
@@ -220,50 +167,62 @@ def FormatData(file):
 
 
 
-
+def getDateOfMonth(date):
+	return date[3:]
 
 
 
 def main():
+
+	date = 0
+	avgerage_value = 1
+	standard_deviation = 2
+	high_ = 3
+	highest_value_state = 4
+	low_ = 5
+	lowest_value_state = 6
+
+
+	
 
 	#list of state objects 
 	data_04_13_20 = FormatData('04-13-2020.csv') #get a list of state objects
 	
 	print("testing Rates: ")
 	print(DataTesting('testing', data_04_13_20))
-	#TestingRateData_04_13_20 = DataTesting('testing', data_04_13_20)
+	TestingRateData_04_13_20 = DataTesting('testing', data_04_13_20)
 
 	print("people tested: ")
 	print(DataTesting('tested', data_04_13_20))
-	#PeopleTestedData_04_13_20 = DataTesting('testing', data_04_13_20)
+	PeopleTestedData_04_13_20 = DataTesting('testing', data_04_13_20)
 
 	print("Deaths: ")
 	print(DataTesting('deaths', data_04_13_20))
-	#DeathsData_04_13_20 = DataTesting('deaths', data_04_13_20)
+	DeathsData_04_13_20 = DataTesting('deaths', data_04_13_20)
 	
 	print("Confirmed: ")
 	print(DataTesting('confirmed', data_04_13_20))
-	#ConfirmedData_04_13_20 = DataTesting('deaths', data_04_13_20)
+	ConfirmedData_04_13_20 = DataTesting('deaths', data_04_13_20)
 
 	print("recovered: ")
 	print(DataTesting('recovered', data_04_13_20))
-	#RecoveredData_04_13_20 = DataTesting('deaths', data_04_13_20)
+	RecoveredData_04_13_20 = DataTesting('deaths', data_04_13_20)
 
 	print("Hospitilized: ")
 	print(DataTesting('hospitilized', data_04_13_20))
-	#HospitilizedData_04_13_20 = DataTesting('deaths', data_04_13_20)
+	HospitilizedData_04_13_20 = DataTesting('deaths', data_04_13_20)
 
 	print("Hospitilization: ")
 	print(DataTesting('hospitilizations', data_04_13_20))
-	#HostpitilizationsData_04_13_20 = DataTesting('deaths', data_04_13_20)
+	HostpitilizationsData_04_13_20 = DataTesting('deaths', data_04_13_20)
 
 	print("Incidents: ")
 	print(DataTesting('incidents', data_04_13_20))
-	#IncidentsData_04_13_20 = DataTesting('deaths', data_04_13_20)
+	IncidentsData_04_13_20 = DataTesting('deaths', data_04_13_20)
 
 	print("Mortality: ")
 	print(DataTesting('mortality', data_04_13_20))
-	#MortalityData_04_13_20 = DataTesting('deaths', data_04_13_20)
+	MortalityData_04_13_20 = DataTesting('deaths', data_04_13_20)
 
 
 
@@ -271,41 +230,45 @@ def main():
 
 	print("testing Rates: ")
 	print(DataTesting('testing', data_04_14_20))
-	#TestingRateData_04_14_20 = DataTesting('testing', data_04_14_20)
+	TestingRateData_04_14_20 = DataTesting('testing', data_04_14_20)
 
 	print("people tested: ")
 	print(DataTesting('tested', data_04_14_20))
-	#PeopleTestedData_04_14_20 = DataTesting('testing', data_04_14_20)
+	PeopleTestedData_04_14_20 = DataTesting('testing', data_04_14_20)
 
 	print("Deaths: ")
 	print(DataTesting('deaths', data_04_14_20))
-	#DeathsData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	DeathsData_04_14_20 = DataTesting('deaths', data_04_14_20)
 	
 	print("Confirmed: ")
 	print(DataTesting('confirmed', data_04_14_20))
-	#ConfirmedData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	ConfirmedData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
 	print("recovered: ")
 	print(DataTesting('recovered', data_04_14_20))
-	#RecoveredData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	RecoveredData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
 	print("Hospitilized: ")
 	print(DataTesting('hospitilized', data_04_14_20))
-	#HospitilizedData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	HospitilizedData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
 	print("Hospitilization: ")
 	print(DataTesting('hospitilizations', data_04_14_20))
-	#HostpitilizationsData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	HostpitilizationsData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
 	print("Incidents: ")
 	print(DataTesting('incidents', data_04_14_20))
-	#IncidentsData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	IncidentsData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
 	print("Mortality: ")
 	print(DataTesting('mortality', data_04_14_20))
-	#MortalityData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	MortalityData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
-
+	Y = [DeathsData_04_13_20[avgerage_value], DeathsData_04_14_20[avgerage_value]]
+	X = [getDateOfMonth(DeathsData_04_13_20[date]), getDateOfMonth(DeathsData_04_14_20[date])]
+	print(X)
+	print(Y)
+	GraphingCalculator.CalculateGraph(X, Y, 10, 16, 400, 465, "black")
 
 if __name__ == "__main__":
 	main()

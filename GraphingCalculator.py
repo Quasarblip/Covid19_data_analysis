@@ -89,32 +89,33 @@ def EvaluatePostfix(postfix, X):
     return answer
 
 
-#call this func feeding it a infix function and it will create window and graph
-def CalculateGraph(infixInput, xHigh, xLow, yHigh, yLow, resolution):
+#call this func feeding it a x list and y list and it will create window and graph
+def CalculateGraph(xList, yList, xHigh, xLow, yHigh, yLow, color):
     #PrintInstructions()
-    infix = infixInput
-    postfix = InfixToPostfix(infix)
+    #infix = infixInput
+    #postfix = InfixToPostfix(infix)
 
                   
     # Generate the point data:
-    X = []
-    Y = []
+    X = xList
+    Y = yList
     
     XLOW = xLow
     YLOW = yLow
     XHIGH = xHigh
     YHIGH = yHigh
-    XINC = resolution
+    #XINC = resolution
         
-    x = XLOW
-    while x <= XHIGH:
+    # while x <= XHIGH:
     
-        y = EvaluatePostfix(postfix, x)
+    #     y = EvaluatePostfix(postfix, x)
 
+	# 	#X is time
+	# 	#Y is value
 
-        X.append(x)
-        Y.append(y)
-        x += XINC
+    #     X.append(x)
+    #     Y.append(y)
+    #     x += XINC
 
 
     # Draw the point data:
