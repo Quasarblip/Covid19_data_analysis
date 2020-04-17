@@ -5,6 +5,7 @@ import pandas as pd
 import mpu.pd
 
 import stateData
+import subjectDataSets
 import GraphingCalculator
 
 
@@ -135,8 +136,13 @@ def DataTesting(option, data):
 
 	AvgValue = total / float(count)
 	stdDeviation = math.sqrt(total/count)
-	date = state.getLastUpdate()[5:10]
 
+	#deal with horrible formating w/ date 
+	date = str(state.getLastUpdate())[5:10]
+#	if type(state.getLastUpdate()) == str:
+#		return date, AvgValue, stdDeviation, high, highestValueState, low, lowestValueState
+#	if math.isnan(state.getLastUpdate()):
+#		date = 'null'
 	return date, AvgValue, stdDeviation, high, highestValueState, low, lowestValueState
 
 
@@ -158,8 +164,8 @@ def FormatData(file):
 		    s['Lat'], s['Long_'], s['People_Tested'], s['Testing_Rate'], s['Last_Update'])
 
 		statesData.append(sd)
-	
-	#throw out the garbage last lien in the csv data
+		
+	#throw out the garbage last line in the csv data
 	statesData.pop(-1)
 
 	#print("There are", statesData[0].getActive(), "Active cases in", statesData[0].getState())
@@ -170,10 +176,39 @@ def FormatData(file):
 def getDateOfMonth(date):
 	return date[3:]
 
+def getData(data, storageClass, printB):
+
+	queries = ['testing', 'tested', 'deaths', 'confirmed',
+	'recovered', 'hospitilized','hospitilizations',
+	'incidents', 'mortality']
+	newData = []
+	for i in range(len(queries)):
+		TransformedData = DataTesting(queries[i], data)
+		if printB:
+			print()
+			print(queries[i] + ":")
+			print(TransformedData)
+		newData.append(TransformedData)
+	storageClass.addTestingRates_L(newData[0])
+	storageClass.addPeopleTested_L(newData[1])
+	storageClass.addDeaths_L(newData[2])
+	storageClass.addConfirmed_L(newData[3])
+	storageClass.addRecovered_L(newData[4])
+	storageClass.addHospitilized_L(newData[5])
+	storageClass.addHospitilization_L(newData[6])
+	storageClass.addIncidents_L(newData[7])
+	storageClass.addMortality_L(newData[8])
+	
+	return
+		
+
+		
+
 
 
 def main():
-
+	PrintB = False
+	#indexing
 	date = 0
 	avgerage_value = 1
 	standard_deviation = 2
@@ -182,96 +217,68 @@ def main():
 	low_ = 5
 	lowest_value_state = 6
 
+	#lists of data classes
+	us_April = 	subjectDataSets.SubjectDataSets()
+
 
 	
 
 	#list of state objects 
-
+	data_04_12_20 = FormatData('04-12-2020.csv') #get a list of state objects
+	getData(data_04_12_20, us_April, PrintB)	
 
 
 	data_04_13_20 = FormatData('04-13-2020.csv') #get a list of state objects
-	
-	print("testing Rates: ")
-	print(DataTesting('testing', data_04_13_20))
-	TestingRateData_04_13_20 = DataTesting('testing', data_04_13_20)
-
-	print("people tested: ")
-	print(DataTesting('tested', data_04_13_20))
-	PeopleTestedData_04_13_20 = DataTesting('testing', data_04_13_20)
-
-	print("Deaths: ")
-	print(DataTesting('deaths', data_04_13_20))
-	DeathsData_04_13_20 = DataTesting('deaths', data_04_13_20)
-	
-	print("Confirmed: ")
-	print(DataTesting('confirmed', data_04_13_20))
-	ConfirmedData_04_13_20 = DataTesting('deaths', data_04_13_20)
-
-	print("recovered: ")
-	print(DataTesting('recovered', data_04_13_20))
-	RecoveredData_04_13_20 = DataTesting('deaths', data_04_13_20)
-
-	print("Hospitilized: ")
-	print(DataTesting('hospitilized', data_04_13_20))
-	HospitilizedData_04_13_20 = DataTesting('deaths', data_04_13_20)
-
-	print("Hospitilization: ")
-	print(DataTesting('hospitilizations', data_04_13_20))
-	HostpitilizationsData_04_13_20 = DataTesting('deaths', data_04_13_20)
-
-	print("Incidents: ")
-	print(DataTesting('incidents', data_04_13_20))
-	IncidentsData_04_13_20 = DataTesting('deaths', data_04_13_20)
-
-	print("Mortality: ")
-	print(DataTesting('mortality', data_04_13_20))
-	MortalityData_04_13_20 = DataTesting('deaths', data_04_13_20)
-
+	getData(data_04_13_20, us_April, PrintB)	
 
 
 	data_04_14_20 = FormatData('04-14-2020.csv') #get a list of state objects
+	getData(data_04_14_20, us_April, PrintB)	
 
-	print("testing Rates: ")
-	print(DataTesting('testing', data_04_14_20))
-	TestingRateData_04_14_20 = DataTesting('testing', data_04_14_20)
 
-	print("people tested: ")
-	print(DataTesting('tested', data_04_14_20))
-	PeopleTestedData_04_14_20 = DataTesting('testing', data_04_14_20)
 
-	print("Deaths: ")
-	print(DataTesting('deaths', data_04_14_20))
-	DeathsData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	data_04_15_20 = FormatData('04-15-2020.csv') #get a list of state objects
+	getData(data_04_15_20, us_April, PrintB)	
 	
-	print("Confirmed: ")
-	print(DataTesting('confirmed', data_04_14_20))
-	ConfirmedData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
-	print("recovered: ")
-	print(DataTesting('recovered', data_04_14_20))
-	RecoveredData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
-	print("Hospitilized: ")
-	print(DataTesting('hospitilized', data_04_14_20))
-	HospitilizedData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	X = []
+	Y = []
+	XHigh = 0
+	XLow = 0
+	YHigh = 0
+	YLow = 100000000
 
-	print("Hospitilization: ")
-	print(DataTesting('hospitilizations', data_04_14_20))
-	HostpitilizationsData_04_14_20 = DataTesting('deaths', data_04_14_20)
 
-	print("Incidents: ")
-	print(DataTesting('incidents', data_04_14_20))
-	IncidentsData_04_14_20 = DataTesting('deaths', data_04_14_20)
+	AprilMortalityDataUS = us_April.getMortality_L()
+	for i in range(len(AprilMortalityDataUS)):
+	 	
+		x = float(getDateOfMonth(AprilMortalityDataUS[i][date]))
+		y = float(AprilMortalityDataUS[i][avgerage_value])
 
-	print("Mortality: ")
-	print(DataTesting('mortality', data_04_14_20))
-	MortalityData_04_14_20 = DataTesting('deaths', data_04_14_20)
+		print('x:',x)
+		print('y:',y)
+		
+		if i == 0:
+			#all dates should be added in order for this to be correct
+			XLow = x
+		if y > YHigh:
+			YHigh = y
+		if y < YLow:
+			YLow = y
+		if x > XHigh:
+			XHigh = x
+		
+		X.append( x )
+		Y.append( y )
 
-	Y = [DeathsData_04_13_20[avgerage_value], DeathsData_04_14_20[avgerage_value]]
-	X = [getDateOfMonth(DeathsData_04_13_20[date]), getDateOfMonth(DeathsData_04_14_20[date])]
-	print(X)
-	print(Y)
-	GraphingCalculator.CalculateGraph(X, Y, 10, 16, 400, 465, "black")
+	print('x low:', XLow)
+	print('x high:', XHigh)
+
+	print('y low:', YLow)
+	print('y high:', YHigh)
+
+	GraphingCalculator.CalculateGraph(X, Y, XLow, XHigh, YLow, YHigh, "black")
 
 if __name__ == "__main__":
 	main()

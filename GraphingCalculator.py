@@ -90,7 +90,7 @@ def EvaluatePostfix(postfix, X):
 
 
 #call this func feeding it a x list and y list and it will create window and graph
-def CalculateGraph(xList, yList, xHigh, xLow, yHigh, yLow, color):
+def CalculateGraph(xList, yList, xLow, xHigh, yLow, yHigh, color):
     #PrintInstructions()
     #infix = infixInput
     #postfix = InfixToPostfix(infix)
