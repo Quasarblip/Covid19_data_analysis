@@ -186,6 +186,9 @@ def main():
 	
 
 	#list of state objects 
+
+
+
 	data_04_13_20 = FormatData('04-13-2020.csv') #get a list of state objects
 	
 	print("testing Rates: ")
