@@ -19,7 +19,7 @@ import GraphingCalculator
 	
 
 
-def DataTesting(option, data):
+def DataTesting(option, data, Date):
 	total = 0.0
 	totalStdDeviation = 0.0
 	count = 0
@@ -28,6 +28,9 @@ def DataTesting(option, data):
 	lowestValueState = ""
 	low = 100000000
 	get = ""
+
+	#this just gets passed through and returned to by pass bad data formatting
+	date = Date
 
 	for state in data:
 		count += 1
@@ -141,11 +144,11 @@ def DataTesting(option, data):
 	stdDeviation = math.sqrt(total/count)
 
 	#deal with horrible formating w/ date 
-	if '/' in str(state.getLastUpdate()): #this is for international
-		date = str(state.getLastUpdate())[:3]
-
-	else: #this is for civilized US
-		date = str(state.getLastUpdate())[5:10]
+#	if '/' in str(state.getLastUpdate()): #this is for international
+#		date = str(state.getLastUpdate())[:3]
+#
+#	else: #this is for civilized US
+#		date = str(state.getLastUpdate())[5:10]
 	
 	return date, AvgValue, stdDeviation, high, highestValueState, low, lowestValueState
 
@@ -232,13 +235,13 @@ def getDateOfMonthInternational(date):
 def getDateOfMonth(date):
 	return date[3:]
 
-def getDataInternational(data, storageClass, printB):
+def getDataInternational(data, storageClass, date, printB):
 	
 	queries = ['deaths', 'confirmed', 'recovered']	
 	newData = []
 	for i in range(len(queries)):
 		
-		TransformedData = DataTesting(queries[i], data)
+		TransformedData = DataTesting(queries[i], data, date)
 		if printB:
 			print()
 			print(queries[i] + ":")
@@ -252,7 +255,7 @@ def getDataInternational(data, storageClass, printB):
 
 
 
-def getData(data, storageClass, printB):
+def getData(data, storageClass, date, printB):
 	 
 	queries = ['testing', 'tested', 'deaths', 'confirmed',
 	'recovered', 'hospitilized','hospitilizations',
@@ -260,7 +263,7 @@ def getData(data, storageClass, printB):
 	newData = []
 
 	for i in range(len(queries)):
-		TransformedData = DataTesting(queries[i], data)
+		TransformedData = DataTesting(queries[i], data, date)
 		if printB:
 			print()
 			print(queries[i] + ":")
@@ -302,37 +305,37 @@ def graphData(data, graphtitle, color):
 	YHigh = 0
 	YLow = 100000000
 
+
 	'''
 	data passed here is a method not the correct data for all 
 	new Internation date added
 	'''
 	for i in range(len(data)):
 	
-		if i == 0:
-			realDate = getDateOfMonth(data[i][date]
-
-		#Skip all datapoints that have not been updated on that specific date			
-		if int(getDateOfMonth(data[i][date])) != realDate:
-			continue
+		#account for the data by passing in a integer representation of the day of month 
+		#when first creating the data. I know what data Im passing in.
 
 		#print(data[i][date])
 		if len(data[i][date]) == 5:
 			x = float(getDateOfMonth(data[i][date]))
 		if len(data[i][date]) == 3:
 			x = float(getDateOfMonthInternational(data[i][date]))
+			
+			realDate = float(getDateOfMonthInternational(data[i][date]))
+
 		y = float(data[i][avgerage_value])
 
-		print('x:',x)
-		print('y:',y)
+		print('x:', x)
+		print('y:', y)
 		
 		if x < XLow:
-			XLow = x
+			XLow = x - 2
 		if y > YHigh:
-			YHigh = y
+			YHigh = y + 2
 		if y < YLow:
-			YLow = y
+			YLow = y - 2
 		if x > XHigh:
-			XHigh = x
+			XHigh = x + 2
 		
 		X.append( x )
 		Y.append( y )
@@ -365,97 +368,97 @@ def main():
 		#######
 
 #	data_03_01_20 = FormatDataInternationalPre_3_22('03-01-2020.csv')
-#	getDataInternational(data_03_01_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_01_20, int_MarchPre22, 1, PrintInt)	
 #
 #	data_03_02_20 = FormatDataInternationalPre_3_22('03-02-2020.csv')
-#	getDataInternational(data_03_02_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_02_20, int_MarchPre22, 2, PrintInt)	
 #
 #	data_03_03_20 = FormatDataInternationalPre_3_22('03-03-2020.csv')
-#	getDataInternational(data_03_03_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_03_20, int_MarchPre22, 3, PrintInt)	
 #
 #	data_03_04_20 = FormatDataInternationalPre_3_22('03-04-2020.csv')
-#	getDataInternational(data_03_04_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_04_20, int_MarchPre22, 4, PrintInt)	
 #
 #	data_03_05_20 = FormatDataInternationalPre_3_22('03-05-2020.csv')
-#	getDataInternational(data_03_05_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_05_20, int_MarchPre22, 5, PrintInt)	
 #
 #	data_03_06_20 = FormatDataInternationalPre_3_22('03-06-2020.csv')
-#	getDataInternational(data_03_06_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_06_20, int_MarchPre22, 6,  PrintInt)	
 #
 #	data_03_07_20 = FormatDataInternationalPre_3_22('03-07-2020.csv')
-#	getDataInternational(data_03_07_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_07_20, int_MarchPre22, 7, PrintInt)	
 #
 #	data_03_08_20 = FormatDataInternationalPre_3_22('03-08-2020.csv')
-#	getDataInternational(data_03_08_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_08_20, int_MarchPre22, 8, PrintInt)	
 #
 #	data_03_09_20 = FormatDataInternationalPre_3_22('03-09-2020.csv')
-#	getDataInternational(data_03_09_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_09_20, int_MarchPre22, 9, PrintInt)	
 #
 #	data_03_10_20 = FormatDataInternationalPre_3_22('03-10-2020.csv')
-#	getDataInternational(data_03_10_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_10_20, int_MarchPre22, 10, PrintInt)	
 #
 #	data_03_11_20 = FormatDataInternationalPre_3_22('03-11-2020.csv')
-#	getDataInternational(data_03_11_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_11_20, int_MarchPre22, 11, PrintInt)	
 #
 #	data_03_12_20 = FormatDataInternationalPre_3_22('03-12-2020.csv')
-#	getDataInternational(data_03_12_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_12_20, int_MarchPre22, 12, PrintInt)	
 #
 #	data_03_13_20 = FormatDataInternationalPre_3_22('03-13-2020.csv')
-#	getDataInternational(data_03_13_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_13_20, int_MarchPre22, 13, PrintInt)	
 #
 #	data_03_14_20 = FormatDataInternationalPre_3_22('03-14-2020.csv')
-#	getDataInternational(data_03_14_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_14_20, int_MarchPre22, 14, PrintInt)	
 #
 #	data_03_15_20 = FormatDataInternationalPre_3_22('03-15-2020.csv')
-#	getDataInternational(data_03_15_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_15_20, int_MarchPre22, 15, PrintInt)	
 #
 #	data_03_16_20 = FormatDataInternationalPre_3_22('03-16-2020.csv')
-#	getDataInternational(data_03_16_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_16_20, int_MarchPre22, 16, PrintInt)	
 #
 #	data_03_17_20 = FormatDataInternationalPre_3_22('03-17-2020.csv')
-#	getDataInternational(data_03_17_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_17_20, int_MarchPre22, 17, PrintInt)	
 #
 #	data_03_18_20 = FormatDataInternationalPre_3_22('03-18-2020.csv')
-#	getDataInternational(data_03_18_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_18_20, int_MarchPre22, 18, PrintInt)	
 #
 #	data_03_19_20 = FormatDataInternationalPre_3_22('03-19-2020.csv')
-#	getDataInternational(data_03_19_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_19_20, int_MarchPre22, 19, PrintInt)	
 #
 #	data_03_20_20 = FormatDataInternationalPre_3_22('03-20-2020.csv')
-#	getDataInternational(data_03_20_20, int_MarchPre22, PrintInt)	
+#	getDataInternational(data_03_20_20, int_MarchPre22, 20, PrintInt)	
 #
 #	data_03_21_20 = FormatDataInternationalPre_3_22('03-21-2020.csv')
-#	getDataInternational(data_03_21_20, int_March, PrintInt)	
+#	getDataInternational(data_03_21_20, int_March, 21, PrintInt)	
 
 	data_03_22_20 = FormatDataInternational('03-22-2020.csv')
-	getDataInternational(data_03_22_20, int_March, PrintInt)	
+	getDataInternational(data_03_22_20, int_March, 22, PrintInt)	
 
 	data_03_23_20 = FormatDataInternational('03-23-2020.csv')
-	getDataInternational(data_03_23_20, int_March, PrintInt)	
+	getDataInternational(data_03_23_20, int_March, 23, PrintInt)	
 
 	data_03_24_20 = FormatDataInternational('03-24-2020.csv')
-	getDataInternational(data_03_24_20, int_March, PrintInt)	
+	getDataInternational(data_03_24_20, int_March, 24, PrintInt)	
 
 	data_03_25_20 = FormatDataInternational('03-25-2020.csv')
-	getDataInternational(data_03_25_20, int_March, PrintInt)	
+	getDataInternational(data_03_25_20, int_March, 25, PrintInt)	
 
 	data_03_26_20 = FormatDataInternational('03-26-2020.csv')
-	getDataInternational(data_03_26_20, int_March, PrintInt)	
+	getDataInternational(data_03_26_20, int_March, 26, PrintInt)	
 
 	data_03_27_20 = FormatDataInternational('03-27-2020.csv')
-	getDataInternational(data_03_27_20, int_March, PrintInt)	
+	getDataInternational(data_03_27_20, int_March, 27, PrintInt)	
 
 	data_03_28_20 = FormatDataInternational('03-28-2020.csv')
-	getDataInternational(data_03_28_20, int_March, PrintInt)	
+	getDataInternational(data_03_28_20, int_March, 28, PrintInt)	
 
 	data_03_29_20 = FormatDataInternational('03-29-2020.csv')
-	getDataInternational(data_03_29_20, int_March, PrintInt)	
+	getDataInternational(data_03_29_20, int_March, 29, PrintInt)	
 
 	data_03_30_20 = FormatDataInternational('03-30-2020.csv')
-	getDataInternational(data_03_30_20, int_March, PrintInt)	
+	getDataInternational(data_03_30_20, int_March, 30, PrintInt)	
 
 	data_03_31_20 = FormatDataInternational('03-31-2020.csv')
-	getDataInternational(data_03_31_20, int_March, PrintInt)	
+	getDataInternational(data_03_31_20, int_March, 31, PrintInt)	
 
 
 		#######
