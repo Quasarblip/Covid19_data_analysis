@@ -90,7 +90,7 @@ def EvaluatePostfix(postfix, X):
 
 
 #call this func feeding it a x list and y list and it will create window and graph
-def CalculateGraph(xList, yList, xLow, xHigh, yLow, yHigh, color):
+def CalculateGraph(xList, yList, xLow, xHigh, yLow, yHigh, color, title):
     #PrintInstructions()
     #infix = infixInput
     #postfix = InfixToPostfix(infix)
@@ -121,10 +121,14 @@ def CalculateGraph(xList, yList, xLow, xHigh, yLow, yHigh, color):
     # Draw the point data:
     win = GraphWin("Graphing Calculator", 600, 600)
     win.setCoords(XLOW,YLOW, XHIGH,YHIGH)
+    anchorPoint = Point(300, 300)
+    titleText = Text(anchorPoint, str(title))
+    titleText.draw(win)
     for i in range(len(X)-1):
         p1 = Point(X[i], Y[i])
         p2 = Point(X[i+1], Y[i+1])
         l = Line(p1, p2)
+        l.setFill(color)
         l.draw(win)
         
     #c = Circle(Point(50,50), 10)
