@@ -7,6 +7,7 @@ import mpu.pd
 from graphics import *
 import stateData
 import internationalData
+import internationalDataPre_3_22
 import subjectDataSets
 import GraphingCalculator
 
@@ -140,15 +141,38 @@ def DataTesting(option, data):
 	stdDeviation = math.sqrt(total/count)
 
 	#deal with horrible formating w/ date 
-	if '/' in str(state.getLastUpdate()):
+	if '/' in str(state.getLastUpdate()): #this is for international
 		date = str(state.getLastUpdate())[:3]
-	else:
+
+	else: #this is for civilized US
 		date = str(state.getLastUpdate())[5:10]
-#	if type(state.getLastUpdate()) == str:
-#		return date, AvgValue, stdDeviation, high, highestValueState, low, lowestValueState
-#	if math.isnan(state.getLastUpdate()):
-#		date = 'null'
+	
 	return date, AvgValue, stdDeviation, high, highestValueState, low, lowestValueState
+
+#Data entered before march 22nd is absolute shit and has horrible formatting!
+def FormatDataInternationalPre_3_22(file):
+
+	CountriesData = []
+
+	df = pd.read_csv(file, delimiter=',')
+
+
+	data = df.to_dict('records')
+
+	for s in data:
+		if s['Country/Region'] == '':
+			continue
+		id = internationalDataPre_3_22.InternationalData(s['Country/Region'], 
+		s['Province/State'], s['Confirmed'], s['Deaths'], s['Recovered'],
+		s['Latitude'], s['Longitude'], s['Last Update'])
+
+		CountriesData.append(id)
+		
+	#throw out the garbage last line in the csv data
+	CountriesData.pop(-1)
+
+	#print("There are", statesData[0].getActive(), "Active cases in", statesData[0].getState())
+	return CountriesData
 
 def FormatDataInternational(file):
 
@@ -259,8 +283,10 @@ def getData(data, storageClass, printB):
 
 def graphData(data, graphtitle, color):
 
-
+	#print(data)
 	date = 0
+	realDate = 0
+
 	avgerage_value = 1
 	standard_deviation = 2
 	high_ = 3
@@ -272,13 +298,24 @@ def graphData(data, graphtitle, color):
 	X = []
 	Y = []
 	XHigh = 0
-	XLow = 0
+	XLow = 100000000
 	YHigh = 0
 	YLow = 100000000
 
-
+	'''
+	data passed here is a method not the correct data for all 
+	new Internation date added
+	'''
 	for i in range(len(data)):
-		print(data[i][date])
+	
+		if i == 0:
+			realDate = getDateOfMonth(data[i][date]
+
+		#Skip all datapoints that have not been updated on that specific date			
+		if int(getDateOfMonth(data[i][date])) != realDate:
+			continue
+
+		#print(data[i][date])
 		if len(data[i][date]) == 5:
 			x = float(getDateOfMonth(data[i][date]))
 		if len(data[i][date]) == 3:
@@ -288,8 +325,7 @@ def graphData(data, graphtitle, color):
 		print('x:',x)
 		print('y:',y)
 		
-		if i == 0:
-			#all dates should be added in order for this to be correct
+		if x < XLow:
 			XLow = x
 		if y > YHigh:
 			YHigh = y
@@ -310,16 +346,121 @@ def graphData(data, graphtitle, color):
 	GraphingCalculator.CalculateGraph(X, Y, XLow, XHigh, YLow, YHigh, color, title)
 
 def main():
-	PrintInt =True
+	PrintInt =False
 	PrintState = False
 	
 	#lists of data objects (international or state)
 	us_April = 	subjectDataSets.SubjectDataSets()
 	int_April = subjectDataSets.SubjectDataSets()
+	int_March = subjectDataSets.SubjectDataSets()
+	
+	#int_MarchPre22 = subjectDataSets.SubjectDataSets()
 
 	###############
 	#INTERNATIONAL#
 	###############
+
+		#######
+		#MARCH#
+		#######
+
+#	data_03_01_20 = FormatDataInternationalPre_3_22('03-01-2020.csv')
+#	getDataInternational(data_03_01_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_02_20 = FormatDataInternationalPre_3_22('03-02-2020.csv')
+#	getDataInternational(data_03_02_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_03_20 = FormatDataInternationalPre_3_22('03-03-2020.csv')
+#	getDataInternational(data_03_03_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_04_20 = FormatDataInternationalPre_3_22('03-04-2020.csv')
+#	getDataInternational(data_03_04_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_05_20 = FormatDataInternationalPre_3_22('03-05-2020.csv')
+#	getDataInternational(data_03_05_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_06_20 = FormatDataInternationalPre_3_22('03-06-2020.csv')
+#	getDataInternational(data_03_06_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_07_20 = FormatDataInternationalPre_3_22('03-07-2020.csv')
+#	getDataInternational(data_03_07_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_08_20 = FormatDataInternationalPre_3_22('03-08-2020.csv')
+#	getDataInternational(data_03_08_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_09_20 = FormatDataInternationalPre_3_22('03-09-2020.csv')
+#	getDataInternational(data_03_09_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_10_20 = FormatDataInternationalPre_3_22('03-10-2020.csv')
+#	getDataInternational(data_03_10_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_11_20 = FormatDataInternationalPre_3_22('03-11-2020.csv')
+#	getDataInternational(data_03_11_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_12_20 = FormatDataInternationalPre_3_22('03-12-2020.csv')
+#	getDataInternational(data_03_12_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_13_20 = FormatDataInternationalPre_3_22('03-13-2020.csv')
+#	getDataInternational(data_03_13_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_14_20 = FormatDataInternationalPre_3_22('03-14-2020.csv')
+#	getDataInternational(data_03_14_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_15_20 = FormatDataInternationalPre_3_22('03-15-2020.csv')
+#	getDataInternational(data_03_15_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_16_20 = FormatDataInternationalPre_3_22('03-16-2020.csv')
+#	getDataInternational(data_03_16_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_17_20 = FormatDataInternationalPre_3_22('03-17-2020.csv')
+#	getDataInternational(data_03_17_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_18_20 = FormatDataInternationalPre_3_22('03-18-2020.csv')
+#	getDataInternational(data_03_18_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_19_20 = FormatDataInternationalPre_3_22('03-19-2020.csv')
+#	getDataInternational(data_03_19_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_20_20 = FormatDataInternationalPre_3_22('03-20-2020.csv')
+#	getDataInternational(data_03_20_20, int_MarchPre22, PrintInt)	
+#
+#	data_03_21_20 = FormatDataInternationalPre_3_22('03-21-2020.csv')
+#	getDataInternational(data_03_21_20, int_March, PrintInt)	
+
+	data_03_22_20 = FormatDataInternational('03-22-2020.csv')
+	getDataInternational(data_03_22_20, int_March, PrintInt)	
+
+	data_03_23_20 = FormatDataInternational('03-23-2020.csv')
+	getDataInternational(data_03_23_20, int_March, PrintInt)	
+
+	data_03_24_20 = FormatDataInternational('03-24-2020.csv')
+	getDataInternational(data_03_24_20, int_March, PrintInt)	
+
+	data_03_25_20 = FormatDataInternational('03-25-2020.csv')
+	getDataInternational(data_03_25_20, int_March, PrintInt)	
+
+	data_03_26_20 = FormatDataInternational('03-26-2020.csv')
+	getDataInternational(data_03_26_20, int_March, PrintInt)	
+
+	data_03_27_20 = FormatDataInternational('03-27-2020.csv')
+	getDataInternational(data_03_27_20, int_March, PrintInt)	
+
+	data_03_28_20 = FormatDataInternational('03-28-2020.csv')
+	getDataInternational(data_03_28_20, int_March, PrintInt)	
+
+	data_03_29_20 = FormatDataInternational('03-29-2020.csv')
+	getDataInternational(data_03_29_20, int_March, PrintInt)	
+
+	data_03_30_20 = FormatDataInternational('03-30-2020.csv')
+	getDataInternational(data_03_30_20, int_March, PrintInt)	
+
+	data_03_31_20 = FormatDataInternational('03-31-2020.csv')
+	getDataInternational(data_03_31_20, int_March, PrintInt)	
+
+
+		#######
+		#APRIL#
+		#######
 
 	data_04_01_20 = FormatDataInternational('04-01-2020.csv')
 	getDataInternational(data_04_01_20, int_April, PrintInt)	
@@ -379,13 +520,18 @@ def main():
 
 	#INTERNATIONAL
 	AprilDeathsDataInternational = int_April.getDeaths_L()
+	MarchDeathsDataInternational = int_March.getDeaths_L()
 
 	#STATES
 	AprilMortalityDataUS = us_April.getMortality_L()
 	AprilDeathsDataUS = us_April.getDeaths_L()
 
 	#graphData(AprilDeathsDataUS, "US deaths April", 'black')
-	graphData(AprilDeathsDataInternational, "International deaths april", 'red')
+	#graphData(AprilDeathsDataInternational, "International deaths april", 'red')
+	
+	#Dates are clearly fucked up on the x Axis
+	#TODO FIX THIS SHIT
+	graphData(MarchDeathsDataInternational, 'Internation deaths march', 'black')
 
 if __name__ == "__main__":
 	main()
